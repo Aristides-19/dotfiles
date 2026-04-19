@@ -42,4 +42,8 @@ if [ "$SHELL" != "/usr/bin/zsh" ]; then
     chsh -s /usr/bin/zsh
 fi
 
+echo "Enabling ASUS services..."
+sudo systemctl enable --now asusd
+sudo systemctl enable --now supergfxd
+
 echo "Package installation complete!"
