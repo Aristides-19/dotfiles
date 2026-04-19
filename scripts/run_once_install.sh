@@ -31,6 +31,7 @@ PACKAGES=(
     "micro"
     "btop"
     "helium-browser-bin"
+    "systemctl-tui"
 )
 
 echo "Installing packages..."
