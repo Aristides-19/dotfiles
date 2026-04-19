@@ -1,0 +1,2 @@
+shell /usr/bin/zsh
+mouse_map right press ungrabbed paste_from_clipboard
