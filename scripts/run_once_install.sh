@@ -32,6 +32,9 @@ PACKAGES=(
     "btop"
     "helium-browser-bin"
     "systemctl-tui"
+    "flatpak"
+    "bazaar"
+    "flatseal"
 )
 
 echo "Installing packages..."
