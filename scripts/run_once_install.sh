@@ -21,10 +21,20 @@ PACKAGES=(
     "zsh-syntax-highlighting"
     "fastfetch"
     "code"
+    "bitwarden"
+    "asusctl"
+    "supergfxctl"
+    "rog-control-center"
+    "github-cli"
+    "ttf-jetbrains-mono"
+    "ttf-jetbrains-mono-nerd"
+    "micro"
+    "btop"
+    "helium-browser-bin"
 )
 
 echo "Installing packages..."
-paru -S --needed --noconfirm "${PACKAGES[@]}"
+sudo pacman -S --needed --noconfirm "${PACKAGES[@]}"
 
 if [ "$SHELL" != "/usr/bin/zsh" ]; then
     echo "Changing default shell to Zsh..."
