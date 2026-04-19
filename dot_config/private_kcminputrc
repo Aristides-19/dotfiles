@@ -1,0 +1,11 @@
+[Keyboard]
+NumLock=0
+
+[Libinput][10248][514][ASUF1204:00 2808:0202 Touchpad]
+Enabled=true
+NaturalScroll=true
+PointerAcceleration=0.400
+ScrollFactor=0.3
+
+[Mouse]
+cursorTheme=Vimix-cursors
