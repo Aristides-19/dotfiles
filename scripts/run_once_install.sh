@@ -8,9 +8,15 @@
 
 set -e # Exit on error
 
-echo "Starting install process..."
+# COLORS
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
 
-echo "update: Synchronizing repos..."
+echo -e "${BLUE}Starting install process...${NC}"
+
+echo -e "${BLUE}update: Synchronizing repos...${NC}"
 sudo pacman -Syu --noconfirm
 
 PACKAGES=(
@@ -20,7 +26,6 @@ PACKAGES=(
     "zsh-autosuggestions"
     "zsh-syntax-highlighting"
     "fastfetch"
-    "code"
     "bitwarden"
     "asusctl"
     "supergfxctl"
@@ -37,16 +42,26 @@ PACKAGES=(
     "flatseal"
 )
 
-echo "Installing packages..."
+AUR=(
+    "klassy"
+    "visual-studio-code-bin"
+)
+
+echo -e "${BLUE}Installing OFFICIAL packages...${NC}"
 sudo pacman -S --needed --noconfirm "${PACKAGES[@]}"
 
-if [ "$SHELL" != "/usr/bin/zsh" ]; then
-    echo "Changing default shell to Zsh..."
+echo -e "${BLUE}Installing AUR packages...${NC}"
+paru -S --needed --noconfirm "${AUR[@]}"
+
+echo -e "${GREEN}Package installation complete!${NC}"
+
+if [ "$(basename "$SHELL")" != "zsh" ]; then
+    echo -e "${YELLOW}Changing default shell to Zsh...${NC}"
     chsh -s /usr/bin/zsh
 fi
 
-echo "Enabling ASUS services..."
-sudo systemctl enable --now asusd
-sudo systemctl enable --now supergfxd
+echo -e "${BLUE}Enabling ASUS services...${NC}"
+sudo systemctl enable asusd && echo -e "${YELLOW}Must restart to boot asusd.service${NC}"
+sudo systemctl enable supergfxd && echo -e "${YELLOW}Must restart to boot supergfxd.service${NC}"
 
-echo "Package installation complete!"
+echo -e "${GREEN}Install complete!${NC}"
