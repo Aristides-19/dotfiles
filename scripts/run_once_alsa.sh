@@ -12,8 +12,8 @@ echo -e "${BLUE}Adding Alsamixer settings...${NC}"
 
 sudo mkdir -p /etc/systemd/system/alsa-restore.service.d/
 
-sudo cp "$HOME/.local/share/chezmoi/scripts/assets/alsa/asound.state" /var/lib/alsa/asound.state
-sudo cp "$HOME/.local/share/chezmoi/scripts/assets/alsa/alsa-fix.conf" /etc/systemd/system/alsa-restore.service.d/override.conf
+sudo cp "$HOME/.local/share/chezmoi/assets/alsa/asound.state" /var/lib/alsa/asound.state
+sudo cp "$HOME/.local/share/chezmoi/assets/alsa/alsa-fix.conf" /etc/systemd/system/alsa-restore.service.d/override.conf
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now alsa-restore
