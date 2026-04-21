@@ -20,26 +20,42 @@ echo -e "${BLUE}update: Synchronizing repos...${NC}"
 sudo pacman -Syu --noconfirm
 
 PACKAGES=(
+    # TERMINAL
     "kitty"
     "zsh"
     "zsh-theme-powerlevel10k"
     "zsh-autosuggestions"
     "zsh-syntax-highlighting"
     "fastfetch"
+    # TOOLS
     "bitwarden"
-    "asusctl"
-    "supergfxctl"
-    "rog-control-center"
     "github-cli"
-    "ttf-jetbrains-mono"
-    "ttf-jetbrains-mono-nerd"
     "micro"
+    "wl-clipboard" # for micro cb fixing
     "btop"
     "helium-browser-bin"
     "systemctl-tui"
+    "net-tools"
+    "openbsd-netcat"
+    # ASUS
+    "asusctl"
+    "supergfxctl"
+    "rog-control-center"
+    # FONTS
+    "ttf-jetbrains-mono"
+    "ttf-jetbrains-mono-nerd"
+    "inter-font"
+    # FLATPAK
     "flatpak"
     "bazaar"
     "flatseal"
+    # CONTAINERS
+    "podman"
+    "podman-docker"
+    "podman-compose"
+    # WEB
+    "nodejs"
+    "pnpm"
 )
 
 AUR=(
