@@ -1,6 +1,12 @@
 export ZSH="$HOME/.oh-my-zsh"
 
-# THEME
+## USER SETTINGS
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
+export HISTCONTROL=ignoreboth
+export HISTORY_IGNORE="(\&|[bf]g|c|clear|history|exit|q|pwd|* --help)"
+
+## THEME
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 ## PLUGINS

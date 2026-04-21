@@ -1,4 +1,2 @@
 assets
-scripts
-!scripts/*.sh
 README.md
