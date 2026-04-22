@@ -25,6 +25,3 @@ alias mimir="systemctl suspend"
 
 ## INIT
 fastfetch
-
-## VARS
-export EDITOR=micro
