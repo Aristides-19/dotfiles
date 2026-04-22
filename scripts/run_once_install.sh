@@ -23,6 +23,7 @@ PACKAGES=(
     # TERMINAL
     "kitty"
     "zsh"
+    "oh-my-zsh-git"
     "zsh-theme-powerlevel10k"
     "zsh-autosuggestions"
     "zsh-syntax-highlighting"
