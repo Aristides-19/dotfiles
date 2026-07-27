@@ -17,7 +17,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 ## ALIASES
-alias mimir="systemctl suspend"
+alias lazyssh="TERM=xterm-256color lazyssh"
 
 ## P10K
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -25,3 +25,9 @@ alias mimir="systemctl suspend"
 
 ## INIT
 fastfetch
+
+## VARIABLES
+export SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock
+# PATH
+export PATH="$HOME/fvm/versions/stable/bin:$PATH"
+export PATH="$HOME/.supabase/bin:$PATH"

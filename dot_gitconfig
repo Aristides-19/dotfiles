@@ -1,5 +1,5 @@
 [credential]
-	helper = cache
+	helper = /usr/lib/git-core/git-credential-libsecret
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -8,3 +8,11 @@
 [user]
 	name = Arístides Pérez
 	email = aristp.2005@gmail.com
+[lfs]
+	concurrenttransfers = 100
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
