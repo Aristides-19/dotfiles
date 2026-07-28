@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# =============================================================================
+# SETUP PLYMOUTH THEME SCRIPT
+# This script deploys the tuf-boot Plymouth theme and updates plymouthd.conf
+# =============================================================================
+
+# tuf-boot.plymouth hash: {{ include "assets/plymouth/tuf-boot/tuf-boot.plymouth" | sha256sum }}
+
+set -e
+
+# COLORS
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}Deploying Plymouth theme (tuf-boot)...${NC}"
+
+# Copy theme files to /usr/share/plymouth/themes/tuf-boot
+sudo mkdir -p /usr/share/plymouth/themes/tuf-boot
+sudo cp -r "{{ .chezmoi.sourceDir }}/assets/plymouth/tuf-boot/"* /usr/share/plymouth/themes/tuf-boot/
+
+# Configure active theme in /etc/plymouth/plymouthd.conf
+echo -e "${BLUE}Updating /etc/plymouth/plymouthd.conf...${NC}"
+sudo tee /etc/plymouth/plymouthd.conf > /dev/null <<EOF
+[Daemon]
+Theme=tuf-boot
+EOF
+
+# Rebuild initramfs images to include the new theme
+echo -e "${YELLOW}Rebuilding initramfs images with mkinitcpio...${NC}"
+sudo mkinitcpio -P
+
+echo -e "${GREEN}Plymouth theme setup complete!${NC}"
