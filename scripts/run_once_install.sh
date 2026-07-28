@@ -2,8 +2,7 @@
 
 # =============================================================================
 # INSTALL PACKAGES SCRIPT
-# This script runs once to set up the
-# environment on CachyOS/Arch Linux.
+# This script runs once to set up the environment on CachyOS/Arch Linux.
 # =============================================================================
 
 set -e # Exit on error
@@ -14,13 +13,13 @@ BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}Starting install process...${NC}"
+echo -e "${BLUE}Starting package installation process...${NC}"
 
-echo -e "${BLUE}update: Synchronizing repos...${NC}"
-sudo pacman -Syu --noconfirm
+echo -e "${BLUE}Synchronizing repositories...${NC}"
+sudo pacman -Sy --noconfirm
 
 PACKAGES=(
-    # TERMINAL
+    # TERMINAL & SHELL
     "kitty"
     "zsh"
     "oh-my-zsh-git"
@@ -28,40 +27,74 @@ PACKAGES=(
     "zsh-autosuggestions"
     "zsh-syntax-highlighting"
     "fastfetch"
-    # TOOLS
-    "bitwarden"
+    "btop"
+    
+    # CLI UTILITIES & TOOLS
+    "chezmoi"
     "github-cli"
     "micro"
-    "wl-clipboard" # for micro cb fixing
-    "btop"
-    "helium-browser-bin"
+    "wl-clipboard"
     "systemctl-tui"
+    "zoxide"
+    "eza"
+    "bat"
+    "ripgrep"
+    "fd"
+    "fzf"
+    "tldr"
+    "lazygit"
+    "lazydocker"
+    
+    # NETWORK UTILITIES
     "net-tools"
     "openbsd-netcat"
+    "tailscale"
+    
     # ASUS
     "asusctl"
     "supergfxctl"
     "rog-control-center"
+    
+    # PRODUCTIVITY & APPS
+    "bitwarden"
+    "obsidian"
+    "qbittorrent"
+    "vesktop"
+    "prismlauncher"
+    "gpu-screen-recorder"
+    "mpv"
+    "gimp"
+    "veracrypt"
+    "protonup-qt"
+    
     # FONTS
     "ttf-jetbrains-mono"
     "ttf-jetbrains-mono-nerd"
     "inter-font"
-    # FLATPAK
+    
+    # FLATPAK & CONTAINERS
     "flatpak"
     "bazaar"
     "flatseal"
-    # CONTAINERS
     "podman"
     "podman-docker"
     "podman-compose"
-    # WEB
+    
+    # DEVELOPMENT RUNTIMES
+    "dotnet-sdk"
     "nodejs"
     "pnpm"
+    "go"
+    "rust"
+    "fvm"
 )
 
 AUR=(
-    "klassy"
     "visual-studio-code-bin"
+    "zen-browser-bin"
+    "onlyoffice-bin"
+    "lazyssh"
+    "qdirstat"
 )
 
 echo -e "${BLUE}Installing OFFICIAL packages...${NC}"
@@ -81,4 +114,4 @@ echo -e "${BLUE}Enabling ASUS services...${NC}"
 sudo systemctl enable asusd && echo -e "${YELLOW}Must restart to boot asusd.service${NC}"
 sudo systemctl enable supergfxd && echo -e "${YELLOW}Must restart to boot supergfxd.service${NC}"
 
-echo -e "${GREEN}Install complete!${NC}"
+echo -e "${GREEN}Environment setup complete!${NC}"

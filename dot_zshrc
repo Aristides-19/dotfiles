@@ -18,6 +18,14 @@ source $ZSH/oh-my-zsh.sh
 
 ## ALIASES
 alias lazyssh="TERM=xterm-256color lazyssh"
+alias ls="eza --icons"
+alias ll="eza -lh --icons --git"
+alias la="eza -lah --icons --git"
+alias cat="bat"
+alias search="rg"
+alias ff="fd"
+alias lg="lazygit"
+alias ld="lazydocker"
 
 ## P10K
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -25,9 +33,11 @@ alias lazyssh="TERM=xterm-256color lazyssh"
 
 ## INIT
 fastfetch
+eval "$(zoxide init zsh)"
 
 ## VARIABLES
 export SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock
+
 # PATH
 export PATH="$HOME/fvm/versions/stable/bin:$PATH"
 export PATH="$HOME/.supabase/bin:$PATH"
