@@ -1,0 +1,10 @@
+[Unit]
+Description=Fix ALC256 Audio Levels on Startup
+After=pipewire.service wireplumber.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/fix-audio
+
+[Install]
+WantedBy=default.target

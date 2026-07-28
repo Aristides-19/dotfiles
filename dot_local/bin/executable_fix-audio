@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Dynamically find card number for Realtek ALC256 hardware chip
+CARD=$(aplay -l | grep -i "ALC256" | head -n1 | cut -d':' -f1 | cut -d' ' -f2)
+
+if [ -n "$CARD" ]; then
+    amixer -c "$CARD" sset Master 100% > /dev/null 2>&1
+    amixer -c "$CARD" sset Capture 33 > /dev/null 2>&1
+    amixer -c "$CARD" sset "Internal Mic Boost" 1 > /dev/null 2>&1
+fi
