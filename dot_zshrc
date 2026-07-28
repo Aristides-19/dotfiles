@@ -18,9 +18,9 @@ source $ZSH/oh-my-zsh.sh
 
 ## ALIASES
 alias lazyssh="TERM=xterm-256color lazyssh"
-alias ls="eza --icons"
-alias ll="eza -lh --icons --git"
-alias la="eza -lah --icons --git"
+alias ls="eza --icons=auto"
+alias ll="eza -lh --icons=auto --git"
+alias la="eza -lah --icons=auto --git"
 alias cat="bat"
 alias search="rg"
 alias ff="fd"
@@ -38,6 +38,6 @@ eval "$(zoxide init zsh)"
 ## VARIABLES
 export SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock
 
-# PATH
+## PATH
 export PATH="$HOME/fvm/versions/stable/bin:$PATH"
 export PATH="$HOME/.supabase/bin:$PATH"

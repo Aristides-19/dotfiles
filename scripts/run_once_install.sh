@@ -49,6 +49,7 @@ PACKAGES=(
     "net-tools"
     "openbsd-netcat"
     "tailscale"
+    "kdeconnect"
     
     # ASUS
     "asusctl"
@@ -66,6 +67,7 @@ PACKAGES=(
     "gimp"
     "veracrypt"
     "protonup-qt"
+    "opencode"
     
     # FONTS
     "ttf-jetbrains-mono"
@@ -95,6 +97,7 @@ AUR=(
     "onlyoffice-bin"
     "lazyssh"
     "qdirstat"
+    "openchamber"
 )
 
 echo -e "${BLUE}Installing OFFICIAL packages...${NC}"
