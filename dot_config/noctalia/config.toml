@@ -58,6 +58,8 @@ end = [
     "network",
     "spacer_small",
     "volume",
+    "spacer_small",
+    "battery",
     "spacer_medium",
     "session",
 ]
@@ -106,6 +108,13 @@ color = "secondary"
 
 [widget.volume]
 color = "secondary"
+
+[widget.battery]
+show_label = true
+color = "secondary"
+warning_color = "error"
+hide_when_full = true
+hide_when_plugged = false
 
 [widget.session]
 color = "error"
