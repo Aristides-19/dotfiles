@@ -1,3 +1,4 @@
 #!/bin/bash
 ## 165Hz
-kscreen-doctor output.eDP-2.mode.1
+MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.name | test("eDP")).name')
+hyprctl eval "hl.monitor({ output = \"$MONITOR\", mode = \"1920x1200@165\", position = \"auto\", scale = \"1\" })"

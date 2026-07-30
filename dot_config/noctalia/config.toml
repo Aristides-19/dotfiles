@@ -18,6 +18,13 @@ address = "Caracas, Venezuela"
 [system.monitor]
 gpu_poll_seconds = 2
 
+# -----------------------------------------------------------------------------
+# POWER & BATTERY HOOKS
+# -----------------------------------------------------------------------------
+[hooks]
+battery_discharging = "~/.local/share/scripts/on_battery.sh"
+battery_charging = "~/.local/share/scripts/on_ac.sh"
+
 
 # -----------------------------------------------------------------------------
 # TOP BAR CONFIGURATION
