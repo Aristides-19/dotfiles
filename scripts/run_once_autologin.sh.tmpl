@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# =============================================================================
+# SETUP TTY1 AUTOLOGIN SCRIPT
+# This script configures agetty autologin on TTY1 for Hyprland boot
+# =============================================================================
+
+set -e
+
+# COLORS
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+OVERRIDE_DIR="/etc/systemd/system/getty@tty1.service.d"
+OVERRIDE_FILE="${OVERRIDE_DIR}/override.conf"
+
+echo -e "${BLUE}Configuring TTY1 autologin for {{ .chezmoi.username }}...${NC}"
+
+sudo mkdir -p "${OVERRIDE_DIR}"
+sudo tee "${OVERRIDE_FILE}" > /dev/null << 'EOF'
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin {{ .chezmoi.username }} --noclear %I $TERM
+EOF
+
+sudo systemctl daemon-reload
+
+echo -e "${GREEN}TTY1 autologin setup complete!${NC}"
