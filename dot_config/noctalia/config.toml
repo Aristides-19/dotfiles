@@ -25,6 +25,8 @@ gpu_poll_seconds = 2
 battery_discharging = "~/.local/share/scripts/on_battery.sh"
 battery_charging = "~/.local/share/scripts/on_ac.sh"
 
+[battery]
+warning_threshold = 25
 
 # -----------------------------------------------------------------------------
 # TOP BAR CONFIGURATION
@@ -54,6 +56,10 @@ end = [
     "tray",
     "spacer_medium",
     "notifications",
+    "spacer_small",
+    "screen_recorder",
+    "spacer_small",
+    "home_assistant",
     "spacer_small",
     "network",
     "spacer_small",
@@ -118,6 +124,14 @@ hide_when_plugged = false
 
 [widget.session]
 color = "error"
+
+[widget.screen_recorder]
+type = "noctalia/screen_recorder:recorder"
+color = "secondary"
+
+[widget.home_assistant]
+type = "pozzoo/hassio:status"
+color = "primary"
 
 # System Monitor Widgets
 [widget.temp]
@@ -214,6 +228,27 @@ open_near_click_control_center = true
 session_placement = "floating"
 session_position = "center"
 transparency_mode = "glass"
+
+# -----------------------------------------------------------------------------
+# CONTROL CENTER SHORTCUTS
+# -----------------------------------------------------------------------------
+[[control_center.shortcuts]]
+type = "wifi"
+
+[[control_center.shortcuts]]
+type = "bluetooth"
+
+[[control_center.shortcuts]]
+type = "nightlight"
+
+[[control_center.shortcuts]]
+type = "notification"
+
+[[control_center.shortcuts]]
+type = "power_profile"
+
+[[control_center.shortcuts]]
+type = "keyboard_layout"
 
 [shell.screenshot]
 copy_to_clipboard = true

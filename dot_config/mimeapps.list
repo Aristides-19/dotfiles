@@ -39,7 +39,7 @@ image/webp=satty.desktop;
 
 # Application Protocol Handlers
 x-scheme-handler/bitwarden=bitwarden.desktop;
-x-scheme-handler/discord=vesktop.desktop;
+x-scheme-handler/discord=vesktop.desktop
 x-scheme-handler/hermes=hermes-desktop.desktop;
 x-scheme-handler/mongodb=mongodb-compass.desktop;
 x-scheme-handler/mongodb+srv=mongodb-compass.desktop;

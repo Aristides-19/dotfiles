@@ -2,6 +2,8 @@
 
 hl.config({
     input = {
+        kb_layout = "us,latam",
+        kb_options = "grp:alt_shift_toggle",
         -- sensitivity = -0.25,
         accel_profile = "flat",
         touchpad = {
