@@ -1,0 +1,46 @@
+[Added Associations]
+application/json=micro.desktop;
+application/pdf=zen.desktop;
+application/x-yaml=micro.desktop;
+text/html=zen.desktop;
+text/markdown=micro.desktop;
+text/plain=micro.desktop;
+
+[Default Applications]
+# Text and Code Documents
+application/json=micro.desktop;
+application/x-yaml=micro.desktop;
+text/markdown=micro.desktop;
+text/plain=micro.desktop;
+
+# Web and Documents
+application/pdf=zen.desktop;
+application/x-extension-htm=zen.desktop;
+application/x-extension-html=zen.desktop;
+application/x-extension-shtml=zen.desktop;
+application/x-extension-xht=zen.desktop;
+application/x-extension-xhtml=zen.desktop;
+application/xhtml+xml=zen.desktop;
+text/html=zen.desktop;
+x-scheme-handler/chrome=zen.desktop;
+x-scheme-handler/http=zen.desktop;
+x-scheme-handler/https=zen.desktop;
+
+# File Manager
+inode/directory=org.kde.dolphin.desktop;
+
+# Image Viewer
+image/gif=satty.desktop;
+image/jpeg=satty.desktop;
+image/jpg=satty.desktop;
+image/png=satty.desktop;
+image/svg+xml=satty.desktop;
+image/webp=satty.desktop;
+
+# Application Protocol Handlers
+x-scheme-handler/bitwarden=bitwarden.desktop;
+x-scheme-handler/discord=vesktop.desktop;
+x-scheme-handler/hermes=hermes-desktop.desktop;
+x-scheme-handler/mongodb=mongodb-compass.desktop;
+x-scheme-handler/mongodb+srv=mongodb-compass.desktop;
+x-scheme-handler/unityhub=unityhub.desktop;
