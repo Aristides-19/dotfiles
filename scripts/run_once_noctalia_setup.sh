@@ -30,17 +30,45 @@ NOCTALIA_PACKAGES=(
 echo -e "${BLUE}Installing Hyprland & Noctalia packages...${NC}"
 sudo pacman -S --needed --noconfirm "${NOCTALIA_PACKAGES[@]}"
 
-echo -e "${BLUE}Deploying Noctalia & Hyprland default configurations from /etc/skel...${NC}"
-mkdir -p ~/.config ~/.local/share/icons ~/.icons
+# Helper function to prompt yes/no
+prompt_yn() {
+    local prompt_msg="$1"
+    local default_val="$2" # "y" or "n"
+    
+    if [ ! -t 0 ]; then
+        # Not running in an interactive terminal, default to default_val
+        [ "$default_val" = "y" ] && return 0 || return 1
+    fi
+    
+    if [ "$default_val" = "y" ]; then
+        read -p "$(echo -e "${YELLOW}${prompt_msg} [Y/n]: ${NC}")" choice
+        choice=${choice:-Y}
+    else
+        read -p "$(echo -e "${YELLOW}${prompt_msg} [y/N]: ${NC}")" choice
+        choice=${choice:-N}
+    fi
+    
+    case "$choice" in
+        [yY][eE][sS]|[yY]) return 0 ;;
+        *) return 1 ;;
+    esac
+}
 
-# Copy skeleton configs from /etc/skel to the user's home directory
-cp -rf /etc/skel/.config/gtk-3.0/gtk.css ~/.config/gtk-3.0/ 2>/dev/null || true
-cp -rf /etc/skel/.config/gtk-4.0 ~/.config/ 2>/dev/null || true
-cp -rf /etc/skel/.config/menus ~/.config/ 2>/dev/null || true
-cp -rf /etc/skel/.config/kdeglobals ~/.config/ 2>/dev/null || true
-
-# Copy cursor themes
-cp -rf /etc/skel/.local/share/icons/* ~/.local/share/icons/ 2>/dev/null || true
-cp -rf /etc/skel/.icons/* ~/.icons/ 2>/dev/null || true
+if prompt_yn "Do you want to deploy Noctalia & Hyprland default configurations from /etc/skel?" "y"; then
+    echo -e "${BLUE}Deploying Noctalia & Hyprland default configurations from /etc/skel...${NC}"
+    mkdir -p ~/.config ~/.local/share/icons ~/.icons
+    
+    # Copy skeleton configs from /etc/skel to the user's home directory
+    cp -rf /etc/skel/.config/gtk-3.0/gtk.css ~/.config/gtk-3.0/ 2>/dev/null || true
+    cp -rf /etc/skel/.config/gtk-4.0 ~/.config/ 2>/dev/null || true
+    cp -rf /etc/skel/.config/menus ~/.config/ 2>/dev/null || true
+    cp -rf /etc/skel/.config/kdeglobals ~/.config/ 2>/dev/null || true
+    
+    # Copy cursor themes
+    cp -rf /etc/skel/.local/share/icons/* ~/.local/share/icons/ 2>/dev/null || true
+    cp -rf /etc/skel/.icons/* ~/.icons/ 2>/dev/null || true
+else
+    echo -e "${YELLOW}Skipping skeleton configurations deployment.${NC}"
+fi
 
 echo -e "${GREEN}Noctalia & Hyprland setup complete!${NC}"
