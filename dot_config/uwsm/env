@@ -1,0 +1,22 @@
+# Browser
+export BROWSER=zen-browser
+export MOZ_ENABLE_WAYLAND=1
+
+# Terminal
+export TERMINAL=kitty
+export EDITOR=micro
+export TERM=xterm-kitty
+
+# Wayland, Qt, Gtk, Electron
+export QT_QPA_PLATFORM="wayland;xcb"
+export QT_QPA_PLATFORMTHEME="qt6ct"
+export QT_SCALE_FACTOR_ROUNDING_POLICY=RoundPreferFloor
+export ELECTRON_OZONE_PLATFORM_HINT=wayland
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# Cursor
+export HYPRCURSOR_THEME="Bibata-Modern-Ice"
+export HYPRCURSOR_SIZE=24
+export XCURSOR_THEME="Bibata-Modern-Ice"
+export XCURSOR_SIZE=24
