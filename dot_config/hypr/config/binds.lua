@@ -63,6 +63,9 @@ hl.bind(mainMod .. " + ALT + C",    hl.dsp.exec_cmd(noctCall .. "panel-toggle se
 ---- HARDWARE CONTROLS ----
 ---------------------------
 
+-- Rog Control Center
+hl.bind("XF86Launch3", hl.dsp.exec_cmd("rog-control-center"))
+
 -- Audio
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(noctCall .. "volume-up"),   { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(noctCall .. "volume-down"), { locked = true, repeating = true })
