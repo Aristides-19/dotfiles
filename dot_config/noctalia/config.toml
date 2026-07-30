@@ -57,10 +57,6 @@ end = [
     "spacer_medium",
     "notifications",
     "spacer_small",
-    "screen_recorder",
-    "spacer_small",
-    "home_assistant",
-    "spacer_small",
     "network",
     "spacer_small",
     "volume",
@@ -124,14 +120,6 @@ hide_when_plugged = false
 
 [widget.session]
 color = "error"
-
-[widget.screen_recorder]
-type = "noctalia/screen_recorder:recorder"
-color = "secondary"
-
-[widget.home_assistant]
-type = "pozzoo/hassio:status"
-color = "primary"
 
 # System Monitor Widgets
 [widget.temp]
