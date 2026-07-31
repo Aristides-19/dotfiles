@@ -57,6 +57,8 @@ end = [
     "spacer_medium",
     "notifications",
     "spacer_small",
+    "keymap",
+    "spacer_small",
     "network",
     "spacer_small",
     "volume",
@@ -99,8 +101,11 @@ title_scroll = "on_hover"
 
 [widget.tray]
 capsule = true
-capsule_fill = "on_secondary"
-capsule_opacity = 0.5
+capsule_opacity = 0
+
+[widget.keymap]
+type = "blackbartblues/keymap:widget"
+color = "secondary"
 
 [widget.notifications]
 color = "secondary"

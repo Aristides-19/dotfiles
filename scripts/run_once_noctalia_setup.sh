@@ -71,4 +71,12 @@ else
     echo -e "${YELLOW}Skipping skeleton configurations deployment.${NC}"
 fi
 
+if prompt_yn "Do you want to install plugins?" "y"; then
+    echo -e "${BLUE}Installing plugins...${NC}"
+    
+    noctalia msg plugins enable blackbartblues/keymap 2>/dev/null || true
+else
+    echo -e "${YELLOW}Skipping plugin installation.${NC}"
+fi
+
 echo -e "${GREEN}Noctalia & Hyprland setup complete!${NC}"
