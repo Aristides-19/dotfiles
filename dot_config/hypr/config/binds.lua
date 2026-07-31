@@ -82,8 +82,9 @@ hl.bind(mainMod .. " + Escape",      hl.dsp.exec_cmd("killall noctalia; nohup no
 
 -- Screen Capture
 hl.bind(mainMod .. " + P",     hl.dsp.exec_cmd("hyprpicker -a -n"), { description = "Pick color from screen" })
-hl.bind("Print",               hl.dsp.exec_cmd(noctCall .. "screenshot-region"), { description = "Take region screenshot" })
-hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"), { description = "Take full screenshot" })
+-- This laptop maps Fn + F6 to Mod + Shift + S at firmware level
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(noctCall .. "screenshot-region"), { description = "Take region screenshot (Fn + F6)" })
+hl.bind("Print",               hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"), { description = "Take full screenshot" })
 
 -- Theming and Wallpaper
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(noctCall .. "panel-toggle wallpaper"), { description = "Toggle wallpaper picker" })
@@ -118,7 +119,3 @@ hl.bind(mainMod .. " + mouse_down",           hl.dsp.focus({ workspace = "m-1" }
 hl.bind(mainMod .. " + mouse_up",             hl.dsp.focus({ workspace = "m+1" }), { description = "Scroll to next workspace" })
 hl.bind(mainMod .. " + CONTROL + mouse_up",   hl.dsp.focus({ workspace = "m-1" }), { description = "Scroll to prev workspace (ctrl)" })
 hl.bind(mainMod .. " + CONTROL + mouse_down", hl.dsp.focus({ workspace = "m+1" }), { description = "Scroll to next workspace (ctrl)" })
-
--- Special workspace (scratchpad)
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special" }), { description = "Move window to scratchpad" })
-hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special(), { description = "Toggle scratchpad workspace" })
