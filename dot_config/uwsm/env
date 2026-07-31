@@ -15,6 +15,9 @@ export ELECTRON_OZONE_PLATFORM_HINT=wayland
 export SDL_VIDEODRIVER=wayland
 export _JAVA_AWT_WM_NONREPARENTING=1
 
+# iGPU Primary Renderer
+export AQ_DRM_DEVICES=/dev/dri/$(for c in /sys/class/drm/card*/device; do [ "$(basename $(readlink -f $c))" = "0000:77:00.0" ] && basename $(dirname $c); done)
+
 # Cursor
 export HYPRCURSOR_THEME="Bibata-Modern-Ice"
 export HYPRCURSOR_SIZE=20

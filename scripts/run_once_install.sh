@@ -55,6 +55,7 @@ PACKAGES=(
     "asusctl"
     "supergfxctl"
     "rog-control-center"
+    "amdgpu_top"
     
     # PRODUCTIVITY & APPS
     "bitwarden"
