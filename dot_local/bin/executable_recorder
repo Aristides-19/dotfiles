@@ -89,14 +89,15 @@ notify() {
     local body="$3"
     local img="${4:-}"
     local action="${5:-false}"
+    local app_name="Recorder"
     
     if command -v notify-send >/dev/null 2>&1; then
         if [[ $action == true && -n $img ]]; then
-            notify-send -u "$urgency" -t 10000 -i "$img" -A "open=Open Video" "$title" "$body"
-            elif [[ -n $img ]]; then
-            notify-send -u "$urgency" -t 5000 -i "$img" "$title" "$body"
+            notify-send -a "$app_name" -u "$urgency" -t 10000 -i "$img" -A "open=Open Video" "$title" "$body"
+        elif [[ -n $img ]]; then
+            notify-send -a "$app_name" -u "$urgency" -t 5000 -i "$img" "$title" "$body"
         else
-            notify-send -u "$urgency" -t 3000 "$title" "$body"
+            notify-send -a "$app_name" -u "$urgency" -t 3000 "$title" "$body"
         fi
     fi
 }
