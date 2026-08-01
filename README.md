@@ -83,7 +83,7 @@ Main mod is **SUPER**. Full list in `dot_config/hypr/config/binds.lua`.
 
 ## Dynamic theming
 
-Noctalia generates themes from the current wallpaper and applies them via templates (`dot_config/noctalia/templates/`).
+Noctalia generates themes from the current wallpaper and applies them via templates (`dot_config/noctalia/templates/` or built-in/community templates enabled in `dot_config/noctalia/config.toml`).
 
 ## Troubleshooting
 
