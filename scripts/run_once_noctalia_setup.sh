@@ -82,4 +82,10 @@ else
     echo -e "${YELLOW}Skipping plugin installation.${NC}"
 fi
 
+# Configure Nautilus & Remove Dolphin
+echo -e "${BLUE}Setting up Nautilus & removing Dolphin...${NC}"
+sudo pacman -Rdd --noconfirm dolphin 2>/dev/null || true
+paru -S --needed --noconfirm nautilus-open-any-terminal
+gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal kitty
+
 echo -e "${GREEN}Noctalia & Hyprland setup complete!${NC}"

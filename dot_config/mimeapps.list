@@ -27,7 +27,7 @@ x-scheme-handler/http=zen.desktop;
 x-scheme-handler/https=zen.desktop;
 
 # File Manager
-inode/directory=org.kde.dolphin.desktop;
+inode/directory=org.gnome.Nautilus.desktop;
 
 # Image Viewer
 image/gif=satty.desktop;

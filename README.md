@@ -58,7 +58,7 @@ Main mod is **SUPER**. Full list in `dot_config/hypr/config/binds.lua`.
 | `SUPER + Space`               | Launcher                                           |
 | `SUPER + Return`              | Terminal (kitty + zsh)                             |
 | `SUPER + W`                   | Browser (zen)                                      |
-| `SUPER + E`                   | File manager (dolphin)                             |
+| `SUPER + E`                   | File manager (nautilus)                            |
 | `SUPER + T`                   | Editor                                             |
 | `SUPER + Q`                   | Close window                                       |
 | `SUPER + D` / `SUPER + F`     | Maximize / Fullscreen                              |
