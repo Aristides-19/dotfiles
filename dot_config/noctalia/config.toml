@@ -36,6 +36,7 @@ warning_threshold = 25
 thickness = 35
 scale = 1.00
 background_opacity = 0.50
+widget_spacing = 12
 capsule_radius = 4
 capsule_thickness = 0.75
 concave_edge_corners = false
@@ -49,35 +50,37 @@ radius_top_left = 0
 radius_top_right = 0
 
 # Bar Section Layouts
-start = ["launcher", "spacer_medium", "clock", "spacer_large", "group:g1"]
+start = ["group:g_left", "spacer_medium", "group:g1"]
 center = ["workspaces", "spacer_large", "active_window"]
 end = [
     "media",
     "spacer_large",
     "tray",
-    "spacer_medium",
-    "notifications",
     "spacer_small",
-    "keymap",
-    "spacer_small",
-    "network",
-    "spacer_small",
-    "volume",
-    "spacer_small",
-    "battery",
+    "group:g_right",
     "spacer_medium",
     "session",
 ]
 
+# Capsule Groups
+[[bar.default.capsule_group]]
+id = "g_left"
+members = ["launcher", "clock"]
+opacity = 0
+padding = 4
+
+[[bar.default.capsule_group]]
+id = "g_right"
+members = ["notifications", "keymap", "network", "volume", "battery"]
+opacity = 0
+padding = 4
+
 # Sysmon Capsule Group inside Bar
 [[bar.default.capsule_group]]
 id = "g1"
-members = ["temp", "spacer_small", "sysmon_2", "spacer_small", "sysmon_3"]
-fill = "on_secondary"
-border = ""
+members = ["temp", "sysmon_2", "sysmon_3"]
 opacity = 0
-padding = 6.0
-
+padding = 4
 
 # -----------------------------------------------------------------------------
 # BAR WIDGET DEFINITIONS
@@ -152,7 +155,7 @@ length = 12
 
 [widget.spacer_small]
 type = "spacer"
-length = 12
+length = 6
 
 
 # -----------------------------------------------------------------------------
