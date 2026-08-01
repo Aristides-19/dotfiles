@@ -16,7 +16,7 @@ export SDL_VIDEODRIVER=wayland
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # iGPU Primary Renderer
-export AQ_DRM_DEVICES=/dev/dri/$(for c in /sys/class/drm/card*/device; do [ "$(basename $(readlink -f $c))" = "0000:77:00.0" ] && basename $(dirname $c); done)
+export AQ_DRM_DEVICES=$(for dev in /sys/class/drm/card[0-9]; do [ -e "$dev/device" ] && [ "$(basename "$(readlink -f "$dev/device")")" = "0000:77:00.0" ] && echo "/dev/dri/$(basename "$dev")" && break; done)
 
 # Cursor
 export HYPRCURSOR_THEME="Bibata-Modern-Ice"
