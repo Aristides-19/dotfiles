@@ -46,6 +46,7 @@ These run automatically on the first `chezmoi apply` after being added/modified,
 | `dot_config/gtk-3.0`, `gtk-4.0`, `qt6ct`, `xsettingsd` | Cross-toolkit theming                                                        |
 | `dot_config/btop/`, `dot_config/fastfetch/`            | System monitor + fetch                                                       |
 | `dot_config/systemd/user/`                             | User services (e.g. `fix-audio.service`)                                     |
+| `dot_local/bin/`                                       | Custom user scripts (`recorder`, `fix-audio`, etc. added to `$PATH`)         |
 | `dot_local/share/scripts/`                             | Battery/AC hooks (60Hz ↔ 165Hz switching)                                    |
 
 ## Keybindings
@@ -65,6 +66,9 @@ Main mod is **SUPER**. Full list in `dot_config/hypr/config/binds.lua`.
 | `SUPER + L`                   | Lock screen                                        |
 | `SUPER + P`                   | Color picker                                       |
 | `SUPER + SHIFT + S` / `Print` | Region / full screenshot                           |
+| `SUPER + R`                   | Toggle region recording                            |
+| `SUPER + SHIFT + R`           | Toggle fullscreen recording                        |
+| `SUPER + ALT + R`             | Toggle recording with desktop audio                |
 | `SUPER + V`                   | Clipboard manager                                  |
 | `SUPER + X`                   | Control center                                     |
 | `SUPER + 1..6`                | Switch workspace                                   |

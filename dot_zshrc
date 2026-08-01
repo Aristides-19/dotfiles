@@ -39,5 +39,6 @@ eval "$(zoxide init zsh)"
 export SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock
 
 ## PATH
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/fvm/versions/stable/bin:$PATH"
 export PATH="$HOME/.supabase/bin:$PATH"

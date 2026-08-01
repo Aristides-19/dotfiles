@@ -1,0 +1,225 @@
+#!/bin/bash
+
+# recorder: Optimized screen recording script using wf-recorder on Hyprland.
+# Based on Omarchy's recording script.
+#
+# Usage:
+#   recorder [OPTIONS]
+#
+# Options:
+#   --crf=<15-30>                 Quality factor (default: 15, lower = higher quality/larger size)
+#   --with-desktop-audio          Record desktop / game audio
+#   --with-mic-audio              Record microphone audio
+#   --audio-all                   Record both desktop and microphone audio
+#   --fullscreen                  Record focused monitor directly without region prompt
+#   --fps=<30|60>                 Recording FPS (default: 30)
+#   --stop-recording              Stop active recording if running
+#   -h, --help                    Show this help message
+
+OUTPUT_DIR="${XDG_VIDEOS_DIR:-$HOME/Videos}/Recordings"
+mkdir -p "$OUTPUT_DIR"
+
+RECORDING_FILE="${XDG_RUNTIME_DIR:-/tmp}/recorder-filename"
+LOG_FILE="${XDG_RUNTIME_DIR:-/tmp}/recorder.log"
+
+# Default settings
+CODEC="libvpx-vp9"
+CRF="15"
+DESKTOP_AUDIO=false
+MICROPHONE_AUDIO=false
+FULLSCREEN=false
+FPS=30
+CONTAINER="webm"
+STOP_RECORDING=false
+
+show_help() {
+  cat << EOF
+Usage: recorder [OPTIONS]
+
+Options:
+  --crf=<15-30>                 Quality factor (default: 20, lower = higher quality/larger size)
+  --with-desktop-audio          Record desktop / game audio
+  --with-mic-audio              Record microphone audio
+  --audio-all                   Record both desktop and microphone audio
+  --fullscreen                  Record focused monitor directly without region prompt
+  --fps=<30|60>                 Recording FPS (default: 30)
+  --stop-recording              Stop active recording if running
+  -h, --help                    Show this help message
+EOF
+    exit 0
+}
+
+for arg in "$@"; do
+    case "$arg" in
+        --crf=*) CRF="${arg#*=}" ;;
+        --with-desktop-audio) DESKTOP_AUDIO=true ;;
+        --with-mic-audio) MICROPHONE_AUDIO=true ;;
+        --audio-all) DESKTOP_AUDIO=true; MICROPHONE_AUDIO=true ;;
+        --fullscreen) FULLSCREEN=true ;;
+        --fps=*) FPS="${arg#*=}" ;;
+        --stop-recording) STOP_RECORDING=true ;;
+        -h|--help) show_help ;;
+    esac
+done
+
+recording_active() {
+    pgrep -x "wf-recorder" >/dev/null
+}
+
+select_capture_target() {
+    local target
+    target=$(~/.local/bin/capture-region smart --match-monitor) || return 1
+    
+    if [[ $target == monitor:* ]]; then
+        echo "$target"
+        return
+    fi
+    
+    if [[ $target =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]]; then
+        # wf-recorder uses X,Y WxH format
+        echo "region:${BASH_REMATCH[1]},${BASH_REMATCH[2]} ${BASH_REMATCH[3]}x${BASH_REMATCH[4]}"
+    else
+        return 1
+    fi
+}
+
+notify() {
+    local urgency="${1:-normal}"
+    local title="$2"
+    local body="$3"
+    local img="${4:-}"
+    local action="${5:-false}"
+    
+    if command -v notify-send >/dev/null 2>&1; then
+        if [[ $action == true && -n $img ]]; then
+            notify-send -u "$urgency" -t 10000 -i "$img" -A "open=Open Video" "$title" "$body"
+            elif [[ -n $img ]]; then
+            notify-send -u "$urgency" -t 5000 -i "$img" "$title" "$body"
+        else
+            notify-send -u "$urgency" -t 3000 "$title" "$body"
+        fi
+    fi
+}
+
+start_screenrecording() {
+    local capture_args=()
+    local target
+    
+    if [[ $FULLSCREEN == "true" ]]; then
+        local monitor
+        monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name')
+        target="monitor:$monitor"
+        capture_args=(-o "$monitor")
+    else
+        target=$(select_capture_target) || exit 0
+        
+        case $target in
+            monitor:*)
+                capture_args=(-o "${target#monitor:}")
+            ;;
+            region:*)
+                capture_args=(-g "${target#region:}")
+            ;;
+        esac
+    fi
+    
+    local filename="$OUTPUT_DIR/Recording_$(date +'%Y-%m-%d_%H-%M-%S').$CONTAINER"
+    local audio_args=()
+    
+    if [[ $DESKTOP_AUDIO == true || $MICROPHONE_AUDIO == true ]]; then
+        # Pass PipeWire/PulseAudio audio flags with Opus codec to wf-recorder
+        audio_args=(-a -C libopus)
+    fi
+    
+    echo "===== $(date '+%F %T') starting wf-recorder: target=$target crf=$CRF =====" >> "$LOG_FILE"
+    
+    wf-recorder \
+    "${capture_args[@]}" \
+    -c "$CODEC" \
+    -x yuv420p \
+    -F "scale=out_color_matrix=bt709:out_range=pc" \
+    -p "crf=$CRF" \
+    -p "b:v=0" \
+    -p "deadline=realtime" \
+    -p "cpu-used=5" \
+    -r "$FPS" \
+    -f "$filename" \
+    "${audio_args[@]}" 2>> "$LOG_FILE" &
+    
+    local pid=$!
+    
+    # Wait for process to start and create file
+    local waited=0
+    while kill -0 $pid 2>/dev/null && [[ ! -f $filename ]] && ((waited < 25)); do
+        sleep 0.2
+        ((waited++))
+    done
+    
+    if kill -0 $pid 2>/dev/null; then
+        echo "$filename" > "$RECORDING_FILE"
+        notify "normal" "Recording Started" "Format: WebM (VP9 CRF $CRF)\nSaving to $filename"
+    else
+        notify "critical" "Recording Error" "Failed to start wf-recorder. Check $LOG_FILE"
+    fi
+}
+
+finalize_recording() {
+    local latest
+    latest=$(cat "$RECORDING_FILE" 2>/dev/null)
+    [[ -f $latest ]] || return
+    
+    # Generate thumbnail preview for notification
+    local preview="${latest%.*}-preview.png"
+    if command -v ffmpeg >/dev/null 2>&1; then
+        ffmpeg -y -i "$latest" -ss 00:00:00.1 -vframes 1 -q:v 2 "$preview" -loglevel quiet 2>/dev/null
+    fi
+    
+    # Normalize audio & mute initial PipeWire startup pop if audio track exists
+    if command -v ffprobe >/dev/null 2>&1 && command -v ffmpeg >/dev/null 2>&1; then
+        if ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 "$latest" 2>/dev/null | grep -q audio; then
+            local processed="${latest%.webm}-processed.webm"
+            if ffmpeg -y -i "$latest" -c:v copy -c:a libopus \
+            -af "volume=enable='lt(t,0.4)':volume=0,afade=t=in:st=0.4:d=0.05,loudnorm=I=-14:TP=-1.5:LRA=11" \
+            "$processed" -loglevel quiet 2>/dev/null; then
+                mv "$processed" "$latest"
+            else
+                rm -f "$processed"
+            fi
+        fi
+    fi
+    
+    local res
+    res=$(notify "normal" "Recording Saved" "Click to open file\n$latest" "$preview" true)
+    if [[ $res == "open" ]] && command -v xdg-open >/dev/null 2>&1; then
+        xdg-open "$latest" &>/dev/null &
+    fi
+    rm -f "$preview"
+}
+
+stop_screenrecording() {
+    # Send SIGINT to cleanly close WebM container
+    pkill -SIGINT -x "wf-recorder"
+    
+    local count=0
+    while pgrep -x "wf-recorder" >/dev/null && ((count < 50)); do
+        sleep 0.1
+        count=$((count + 1))
+    done
+    
+    if pgrep -x "wf-recorder" >/dev/null; then
+        pkill -9 -x "wf-recorder"
+        notify "critical" "Recording Force Stopped" "Video file might be corrupted."
+    else
+        finalize_recording
+    fi
+    
+    rm -f "$RECORDING_FILE"
+}
+
+if recording_active; then
+    stop_screenrecording
+    elif [[ $STOP_RECORDING == true ]]; then
+    exit 0
+else
+    start_screenrecording
+fi

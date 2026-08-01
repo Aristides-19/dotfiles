@@ -80,11 +80,14 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down"),
 -- Noctalia
 hl.bind(mainMod .. " + Escape",      hl.dsp.exec_cmd("killall noctalia; nohup noctalia -d >/dev/null 2>&1 & disown"), { description = "Restart Noctalia" })
 
--- Screen Capture
-hl.bind(mainMod .. " + P",     hl.dsp.exec_cmd("hyprpicker -a -n"), { description = "Pick color from screen" })
+-- Screen Capture & Recording
+hl.bind(mainMod .. " + P",         hl.dsp.exec_cmd("hyprpicker -a -n"), { description = "Pick color from screen" })
 -- This laptop maps Fn + F6 to Mod + Shift + S at firmware level
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(noctCall .. "screenshot-region"), { description = "Take region screenshot (Fn + F6)" })
-hl.bind("Print",               hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"), { description = "Take full screenshot" })
+hl.bind("Print",                   hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"), { description = "Take full screenshot" })
+hl.bind(mainMod .. " + R",         hl.dsp.exec_cmd("~/.local/bin/recorder"), { description = "Toggle region recording" })
+hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.local/bin/recorder --fullscreen"), { description = "Toggle fullscreen recording" })
+hl.bind(mainMod .. " + ALT + R",   hl.dsp.exec_cmd("~/.local/bin/recorder --with-desktop-audio"), { description = "Toggle recording with desktop audio" })
 
 -- Theming and Wallpaper
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(noctCall .. "panel-toggle wallpaper"), { description = "Toggle wallpaper picker" })

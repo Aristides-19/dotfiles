@@ -25,6 +25,9 @@ NOCTALIA_PACKAGES=(
     "xdg-desktop-portal-hyprland"
     "xdg-desktop-portal-gtk"
     "uwsm"
+    "wf-recorder"
+    "slurp"
+    "hyprpicker"
 )
 
 echo -e "${BLUE}Installing Hyprland & Noctalia packages...${NC}"

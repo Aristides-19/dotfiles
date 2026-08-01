@@ -63,7 +63,6 @@ PACKAGES=(
     "qbittorrent"
     "vesktop"
     "prismlauncher"
-    "gpu-screen-recorder"
     "mpv"
     "gimp"
     "veracrypt"
