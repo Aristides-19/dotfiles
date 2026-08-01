@@ -100,11 +100,22 @@ AUR=(
     "openchamber"
 )
 
+FLATPAK_APPS=(
+    "dev.deedles.Trayscale"
+    "it.mijorus.gearlever"
+)
+
 echo -e "${BLUE}Installing OFFICIAL packages...${NC}"
 sudo pacman -S --needed --noconfirm "${PACKAGES[@]}"
 
 echo -e "${BLUE}Installing AUR packages...${NC}"
 paru -S --needed --noconfirm "${AUR[@]}"
+
+echo -e "${BLUE}Configuring Flathub repository...${NC}"
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+echo -e "${BLUE}Installing Flatpak packages...${NC}"
+flatpak install -y flathub "${FLATPAK_APPS[@]}"
 
 echo -e "${GREEN}Package installation complete!${NC}"
 
