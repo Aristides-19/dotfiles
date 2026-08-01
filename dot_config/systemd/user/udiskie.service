@@ -1,0 +1,14 @@
+[Unit]
+Description=udiskie mount daemon
+Documentation=https://github.com/coldfix/udiskie/wiki
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/udiskie --smart-tray --notify --no-automount
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

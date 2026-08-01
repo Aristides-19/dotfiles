@@ -35,6 +35,8 @@ PACKAGES=(
     "micro"
     "wl-clipboard"
     "systemctl-tui"
+    "udiskie"
+    "cyme"
     "zoxide"
     "eza"
     "bat"

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# =============================================================================
+# ENABLE SYSTEMD USER SERVICES SCRIPT
+# This script runs whenever user systemd files change to enable them.
+# =============================================================================
+
+# udiskie.service hash: {{ include "dot_config/systemd/user/udiskie.service" | sha256sum }}
+# fix-audio.service hash: {{ include "dot_config/systemd/user/fix-audio.service" | sha256sum }}
+
+set -e
+
+echo "Reloading systemd user daemon and enabling services..."
+
+systemctl --user daemon-reload || true
+systemctl --user enable udiskie.service || true
+systemctl --user enable fix-audio.service || true
+
+echo "Systemd user services configured!"
