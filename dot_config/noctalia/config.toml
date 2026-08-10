@@ -93,7 +93,7 @@ color = "secondary"
 format = "{:%H:%M %A %m/%d/%y}"
 
 [widget.workspaces]
-display = "none"
+show_labels = false
 capsule = false
 active_pill_size = 2.5
 inactive_pill_size = 1.0
@@ -136,13 +136,13 @@ color = "error"
 
 # System Monitor Widgets
 [widget.temp]
-show_label = false
+show_value = false
 
 [widget.sysmon_2]
 type = "sysmon"
 glyph = "gpu-usage"
 stat = "gpu_temp"
-show_label = false
+show_value = false
 
 [widget.sysmon_3]
 type = "sysmon"
