@@ -11,7 +11,7 @@ text/plain=micro.desktop;
 application/json=micro.desktop;
 application/x-yaml=micro.desktop;
 text/markdown=micro.desktop;
-text/plain=micro.desktop;
+text/plain=micro.desktop
 
 # Web and Documents
 application/pdf=zen.desktop;
