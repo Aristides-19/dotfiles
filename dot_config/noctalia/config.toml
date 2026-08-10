@@ -71,7 +71,7 @@ padding = 4
 
 [[bar.default.capsule_group]]
 id = "g_right"
-members = ["notifications", "keymap", "network", "volume", "battery"]
+members = ["notifications", "udiskie", "keymap", "network", "volume", "battery"]
 opacity = 0
 padding = 4
 
@@ -109,6 +109,10 @@ capsule_opacity = 0
 
 [widget.keymap]
 type = "blackbartblues/keymap:widget"
+color = "secondary"
+
+[widget.udiskie]
+type = "aristides/udiskie:status"
 color = "secondary"
 
 [widget.notifications]
