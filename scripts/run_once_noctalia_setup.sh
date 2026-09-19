@@ -28,6 +28,7 @@ NOCTALIA_PACKAGES=(
     "wf-recorder"
     "slurp"
     "hyprpicker"
+    "satty"
 )
 
 echo -e "${BLUE}Installing Hyprland & Noctalia packages...${NC}"
