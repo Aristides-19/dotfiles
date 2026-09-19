@@ -1,0 +1,12 @@
+#!/bin/bash
+## 60Hz (Modo Batería)
+
+export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+export XDG_RUNTIME_DIR="/run/user/{{ .chezmoi.uid }}"
+export HYPRLAND_INSTANCE_SIGNATURE=$(ls -1 "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | grep -v "\.lock" | head -n 1)
+
+if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]; then
+    MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.name | test("eDP")).name')
+    hyprctl eval "hl.monitor({ output = \"$MONITOR\", mode = \"1920x1200@60\", position = \"auto\", scale = \"1\" })"
+fi
+

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# =============================================================================
+# SETUP ASUS & SUPERGFXD CONFIGURATION SCRIPT
+# This script deploys asusd and supergfxd configuration files, disables
+# power-profiles-daemon to prevent race conditions with asusd EPP/profiles,
+# and restarts ASUS services.
+# =============================================================================
+
+# asusd.ron hash: {{ include "system/asusd/asusd.ron.tmpl" | sha256sum }}
+# fan_curves.ron hash: {{ include "system/asusd/fan_curves.ron" | sha256sum }}
+# supergfxd.conf hash: {{ include "system/supergfxd/supergfxd.conf" | sha256sum }}
+
+set -e
+
+# COLORS
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Disable and mask power-profiles-daemon to prevent conflicts/race conditions with asusd
+# (asusd natively manages platform profiles, EPP, fan curves, and TDP thresholds)
+# Note this silently makes noctalia power profiles switches unusable
+echo -e "${YELLOW}Disabling and masking power-profiles-daemon to prevent conflicts with asusd...${NC}"
+sudo systemctl disable --now power-profiles-daemon 2>/dev/null || true
+sudo systemctl mask power-profiles-daemon 2>/dev/null || true
+
+echo -e "${BLUE}Deploying asusd configuration files...${NC}"
+sudo mkdir -p /etc/asusd
+
+# Render and deploy asusd.ron
+chezmoi execute-template < "{{ .chezmoi.sourceDir }}/system/asusd/asusd.ron.tmpl" | sudo tee /etc/asusd/asusd.ron > /dev/null
+sudo cp "{{ .chezmoi.sourceDir }}/system/asusd/fan_curves.ron" /etc/asusd/fan_curves.ron
+sudo chmod 644 /etc/asusd/asusd.ron /etc/asusd/fan_curves.ron
+
+echo -e "${BLUE}Deploying supergfxd configuration...${NC}"
+sudo cp "{{ .chezmoi.sourceDir }}/system/supergfxd/supergfxd.conf" /etc/supergfxd.conf
+sudo chmod 644 /etc/supergfxd.conf
+
+echo -e "${BLUE}Restarting ASUS services...${NC}"
+sudo systemctl restart asusd
+sudo systemctl restart supergfxd
+
+echo -e "${GREEN}ASUS hardware configuration setup complete!${NC}"
