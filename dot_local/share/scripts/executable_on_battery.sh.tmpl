@@ -1,11 +1,20 @@
 #!/bin/bash
-## Sincronizar tasa de refresco según el estado del cargador (AC o Batería)
+## 60Hz (Battery Mode)
 
-IS_AC=$(cat /sys/class/power_supply/A*/online 2>/dev/null | head -n 1)
+export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+export XDG_RUNTIME_DIR="/run/user/{{ .chezmoi.uid }}"
 
-if [ "$IS_AC" = "1" ]; then
-    ~/.local/share/scripts/on_ac.sh
-else
-    ~/.local/share/scripts/on_battery.sh
+# Find active Hyprland instance by checking for live .socket.sock
+for sig in $(ls -1t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null); do
+    if [ -S "$XDG_RUNTIME_DIR/hypr/$sig/.socket.sock" ]; then
+        export HYPRLAND_INSTANCE_SIGNATURE="$sig"
+        break
+    fi
+done
+
+if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]; then
+    MONITOR=$(hyprctl monitors -j 2>/dev/null | jq -r '.[] | select(.name | test("eDP")).name' 2>/dev/null)
+    if [ -n "$MONITOR" ]; then
+        hyprctl eval "hl.monitor({ output = \"$MONITOR\", mode = \"1920x1200@60\", position = \"auto\", scale = \"1\" })"
+    fi
 fi
-
