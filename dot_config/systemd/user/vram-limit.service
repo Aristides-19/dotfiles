@@ -1,0 +1,12 @@
+[Unit]
+Description=Set VRAM limit for user applications (100MB margin on RX 7700S)
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo "drm/0000:03:00.0/vram 8468299776" > /sys/fs/cgroup/user.slice/user-%U.slice/user@%U.service/app.slice/dmem.max'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
+

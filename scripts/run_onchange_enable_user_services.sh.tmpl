@@ -6,12 +6,14 @@
 # =============================================================================
 
 # fix-audio.service hash: {{ include "dot_config/systemd/user/fix-audio.service" | sha256sum }}
+# vram-limit.service hash: {{ include "dot_config/systemd/user/vram-limit.service" | sha256sum }}
 
 set -e
 
 echo "Reloading systemd user daemon and enabling services..."
 
 systemctl --user daemon-reload || true
-systemctl --user enable fix-audio.service || true
+systemctl --user enable --now fix-audio.service || true
+systemctl --user enable --now vram-limit.service || true
 
 echo "Systemd user services configured!"
