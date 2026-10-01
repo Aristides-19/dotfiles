@@ -23,17 +23,19 @@ chezmoi init https://github.com/Aristides-19/dotfiles.git
 chezmoi apply
 ```
 
-### One-time scripts (chezmoi `run_once`)
+### Automation & setup scripts (chezmoi `run_once` / `run_onchange`)
 
-These run automatically on the first `chezmoi apply` after being added/modified, or can be run manually from `scripts/`:
+These run automatically on `chezmoi apply` when added or modified, or can be run manually from `scripts/`:
 
-| Script                                | Purpose                                                                                                      |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `run_once_install.sh`                 | Installs all packages (official + AUR), sets Zsh as default shell, enables `asusd`/`supergfxd` (opinionated) |
-| `run_once_noctalia_setup.sh`          | Installs Hyprland + Noctalia + uwsm + XDG portals, deploys `/etc/skel` GTK/cursor configs, enables plugins   |
-| `run_once_wifi_fix.sh`                | Fixes Wi-Fi drops on Realtek RTL8852BE (disables power save in `rtw89` + NetworkManager)                     |
-| `run_once_autologin.sh.tmpl`          | Configures agetty autologin on TTY1 for direct boot into Hyprland                                            |
-| `run_onchange_setup_plymouth.sh.tmpl` | Deploys the `tuf-boot` Plymouth theme                                                                        |
+| Script                                   | Purpose                                                                                                      |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `run_once_install.sh`                    | Installs all packages (official + AUR), sets Zsh as default shell, enables `asusd`/`supergfxd` (opinionated) |
+| `run_once_noctalia_setup.sh`             | Installs Hyprland + Noctalia + uwsm + XDG portals, deploys `/etc/skel` GTK/cursor configs, enables plugins   |
+| `run_once_wifi_fix.sh`                   | Fixes Wi-Fi drops on Realtek RTL8852BE (disables power save in `rtw89` + NetworkManager)                     |
+| `run_once_autologin.sh.tmpl`             | Configures agetty autologin on TTY1 for direct boot into Hyprland                                            |
+| `run_onchange_setup_plymouth.sh.tmpl`    | Deploys the `tuf-boot` Plymouth theme                                                                        |
+| `run_onchange_setup_asus.sh.tmpl`        | Deploys `asusd`/`supergfxd` configs, fan curves, CPU boost tmpfiles, and masks `power-profiles-daemon`        |
+| `run_onchange_enable_user_services.sh.tmpl` | Reloads systemd user daemon and enables `fix-audio.service` and `vram-limit.service`                          |
 
 ## Repository structure
 
@@ -45,9 +47,10 @@ These run automatically on the first `chezmoi apply` after being added/modified,
 | `dot_config/kitty/`                                    | Terminal                                                                     |
 | `dot_config/gtk-3.0`, `gtk-4.0`, `qt6ct`, `xsettingsd` | Cross-toolkit theming                                                        |
 | `dot_config/btop/`, `dot_config/fastfetch/`            | System monitor + fetch                                                       |
-| `dot_config/systemd/user/`                             | User services (e.g. `fix-audio.service`)                                     |
-| `dot_local/bin/`                                       | Custom user scripts (`recorder`, `fix-audio`, etc. added to `$PATH`)         |
-| `dot_local/share/scripts/`                             | Battery/AC hooks (60Hz ↔ 165Hz switching)                                    |
+| `dot_config/systemd/user/`                             | User services (`fix-audio.service`, `vram-limit.service`)                    |
+| `dot_local/bin/`                                       | Custom user scripts (`recorder`, `fix-audio`, `toggle-cpuboost`, etc.)       |
+| `dot_local/share/scripts/`                             | AC / Battery hooks & login sync (60Hz ↔ 165Hz dynamic switching)              |
+| `system/`                                              | Root-level configs and templates (`asusd`, `supergfxd`, `tmpfiles.d`)        |
 
 ## Keybindings
 
@@ -71,15 +74,22 @@ Main mod is **SUPER**. Full list in `dot_config/hypr/config/binds.lua`.
 | `SUPER + ALT + R`             | Toggle recording with desktop audio                |
 | `SUPER + V`                   | Clipboard manager                                  |
 | `SUPER + X`                   | Control center                                     |
+| `SUPER + B`                   | Toggle CPU turbo boost                             |
 | `SUPER + 1..6`                | Switch workspace                                   |
 | `SUPER + SHIFT + 1..6`        | Move window to workspace                           |
 | `SUPER + CONTROL + arrows`    | Workspace / monitor navigation                     |
 | `Fn + F6`                     | Region screenshot (firmware → `SUPER + SHIFT + S`) |
 | Media/brightness keys         | Volume, mic, playback, brightness                  |
 
-## Hardware / GPU notes
+## Hardware & System Optimizations
 
-- `gpu_busy_percent` can report activity while nothing is using the GPU. To check if the dGPU is *really* busy, use `amdgpu_top` for per-process usage.
+- **Dynamic Display Output Detection:** Hyprland automatically resolves `eDP-1` (Ultimate/dGPU MUX mode) vs `eDP-2` (Hybrid/iGPU mode) to prevent scaling and workspace mismatches.
+- **Dynamic Refresh Rate Switching:** Drops to 60Hz on battery and ramps up to 165Hz on AC power automatically via Noctalia power hooks & login sync script.
+- **VRAM Cgroup Buffer (RX 7700S):** `vram-limit.service` sets a 100 MiB safety margin on user app slice VRAM allocation to avoid hard GPU lockups/freezes when running out of VRAM.
+- **CPU Boost Control:** `SUPER + B` toggles CPU Turbo Boost on/off on the fly (`/sys/devices/system/cpu/cpufreq/boost`) without sudo prompts via tmpfiles rule.
+- **Software Cursor Rendering:** Configured with `no_hardware_cursors = 1` in Hyprland to avoid mouse freeze and artifact issues on AMD dGPU.
+- **ASUS Daemons:** Managed via `asusd` and `supergfxd` (`power-profiles-daemon` masked to eliminate EPP/profile race conditions).
+- **GPU Activity Monitoring:** `gpu_busy_percent` can report activity while nothing is using the GPU; use `amdgpu_top` for accurate per-process telemetry.
 
 ## Dynamic theming
 
@@ -87,9 +97,11 @@ Noctalia generates themes from the current wallpaper and applies them via templa
 
 ## Troubleshooting
 
-- **Wi-Fi drops:** `scripts/run_once_wifi_fix.sh`
+- **Wi-Fi drops:** Handled via `scripts/run_once_wifi_fix.sh`.
 - **Audio levels reset on boot (ALC256):** `dot_config/systemd/user/fix-audio.service` runs `~/.local/bin/fix-audio` after PipeWire/WirePlumber start (user service).
-- **DRM card reordering:** the env resolves the GPU by PCI, so `cardN` changes are handled automatically.
+- **Cursor freeze on dGPU:** Hardware cursors disabled in `dot_config/hypr/config/inputs.lua`.
+- **Monitor output changes with MUX switch:** Automatically resolved by `get_primary_monitor()` in `dot_config/hypr/config/variables.lua`.
+- **DRM card reordering:** Environment resolves GPU by PCI path, so `cardN` changes are handled automatically.
 - **Restart Noctalia:** `SUPER + Escape` (or `killall noctalia; nohup noctalia -d &`).
 
 ## Maintenance
