@@ -84,9 +84,9 @@ else
     echo -e "${YELLOW}Skipping plugin installation.${NC}"
 fi
 
-# Configure Nautilus & Remove Dolphin
+# Configure Nautilus & Remove Dolphin (and other noctalia non preferred apps)
 echo -e "${BLUE}Setting up Nautilus & removing Dolphin...${NC}"
-sudo pacman -Rdd --noconfirm dolphin 2>/dev/null || true
+sudo pacman -Rdd --noconfirm dolphin qview swash 2>/dev/null || true
 paru -S --needed --noconfirm nautilus-open-any-terminal
 gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal kitty
 
