@@ -60,6 +60,9 @@ hl.bind(mainMod .. " + ALT + C",    hl.dsp.exec_cmd(noctCall .. "panel-toggle se
 
 -- 3. Hardware Controls
 
+-- CPU Boost
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("~/.local/bin/toggle-cpuboost"), { description = "Toggle CPU turbo boost" })
+
 -- Rog Control Center
 hl.bind("XF86Launch3", hl.dsp.exec_cmd("rog-control-center"), { description = "Open ROG control center" })
 

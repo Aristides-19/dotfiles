@@ -10,6 +10,7 @@
 # asusd.ron hash: {{ include "system/asusd/asusd.ron.tmpl" | sha256sum }}
 # fan_curves.ron hash: {{ include "system/asusd/fan_curves.ron" | sha256sum }}
 # supergfxd.conf hash: {{ include "system/supergfxd/supergfxd.conf" | sha256sum }}
+# cpuboost.conf hash: {{ include "system/tmpfiles.d/cpuboost.conf" | sha256sum }}
 
 set -e
 
@@ -37,6 +38,11 @@ sudo chmod 644 /etc/asusd/asusd.ron /etc/asusd/fan_curves.ron
 echo -e "${BLUE}Deploying supergfxd configuration...${NC}"
 sudo cp "{{ .chezmoi.sourceDir }}/system/supergfxd/supergfxd.conf" /etc/supergfxd.conf
 sudo chmod 644 /etc/supergfxd.conf
+
+echo -e "${BLUE}Deploying tmpfiles configuration for CPU boost permissions...${NC}"
+sudo cp "{{ .chezmoi.sourceDir }}/system/tmpfiles.d/cpuboost.conf" /etc/tmpfiles.d/cpuboost.conf
+sudo chmod 644 /etc/tmpfiles.d/cpuboost.conf
+sudo systemd-tmpfiles --create /etc/tmpfiles.d/cpuboost.conf
 
 echo -e "${BLUE}Restarting ASUS services...${NC}"
 sudo systemctl restart asusd
