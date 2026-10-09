@@ -202,7 +202,7 @@ timeout = 660.0
 [idle.behavior.lock-and-suspend]
 action = "lock_and_suspend"
 enabled = true
-timeout = 900.0
+timeout = 720.0
 
 [lockscreen]
 fingerprint = false
@@ -268,7 +268,7 @@ variant = "default"
 [[shell.session.actions]]
 action = "logout"
 countdown_seconds = 0.0
-enabled = true
+enabled = false
 shortcut = "2"
 variant = "default"
 
