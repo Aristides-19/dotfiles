@@ -1,10 +1,51 @@
 #!/bin/bash
 
-# Dynamically find card number for Realtek ALC256 hardware chip
-CARD=$(aplay -l | grep -i "ALC256" | head -n1 | cut -d':' -f1 | cut -d' ' -f2)
+# =============================================================================
+# ALC256 Audio Initialization & Fix Script
+# 1. Sets PipeWire/WirePlumber profile to Analog Stereo Duplex (fixes Proton audio)
+# 2. Sets clean hardware mixer baselines (unmutes playback, sets safe capture & mic boost)
+# 3. Works in tandem with WirePlumber soft-mixer so volume sliders don't distort mic.
+# =============================================================================
 
+# 1. Force PipeWire card profile to Analog Stereo Duplex (instead of Pro Audio)
+if command -v pactl >/dev/null 2>&1; then
+    CARD_NAME=$(pactl list cards 2>/dev/null | awk '
+        /^Card #/ { card="" }
+        /^[[:space:]]+Name: / { card=$2 }
+        /Realtek ALC256/ || /10ec0256/ {
+            if (card != "") print card
+        }
+    ' | head -n1)
+    
+    if [ -n "$CARD_NAME" ]; then
+        pactl set-card-profile "$CARD_NAME" "output:analog-stereo+input:analog-stereo" >/dev/null 2>&1 || true
+    fi
+fi
+
+# 2. Dynamically find card number for Realtek ALC256 hardware chip from /proc/asound
+CARD=""
+for codec in /proc/asound/card*/codec#*; do
+    if grep -qi "ALC256" "$codec" 2>/dev/null; then
+        CARD=$(echo "$codec" | sed -n 's|.*/card\([0-9]\+\)/.*|\1|p')
+        break
+    fi
+done
+
+# Fallback to aplay -l if needed
+if [ -z "$CARD" ]; then
+    CARD=$(aplay -l 2>/dev/null | grep -i "ALC256" | head -n1 | sed -n 's/card \([0-9]\+\):.*/\1/p')
+fi
+
+# 3. Apply clean hardware mixer baselines
 if [ -n "$CARD" ]; then
-    amixer -c "$CARD" sset Master 100% > /dev/null 2>&1
-    amixer -c "$CARD" sset Capture 33 > /dev/null 2>&1
+    # Unmute and set playback outputs to 100% (0 dB baseline for software mixer)
+    amixer -c "$CARD" sset Master 100% unmute > /dev/null 2>&1
+    amixer -c "$CARD" sset Speaker 100% unmute > /dev/null 2>&1
+    amixer -c "$CARD" sset Headphone 100% unmute > /dev/null 2>&1
+    amixer -c "$CARD" sset PCM 100% unmute > /dev/null 2>&1
+    
+    # Enable capture with clean baseline (33 = ~7.5 dB, avoids maxing out gain to +30 dB)
+    amixer -c "$CARD" sset Capture 33 cap > /dev/null 2>&1
     amixer -c "$CARD" sset "Internal Mic Boost" 1 > /dev/null 2>&1
+    amixer -c "$CARD" sset "Headset Mic Boost" 1 > /dev/null 2>&1
 fi
