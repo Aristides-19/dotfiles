@@ -20,16 +20,22 @@ export AQ_DRM_DEVICES=$(
     igpu=""
     dgpu=""
     for dev in /sys/class/drm/card[0-9]; do
-        if [ -e "$dev/device" ]; then
-            pci_id=$(basename "$(readlink -f "$dev/device")")
-            if [ "$pci_id" = "0000:77:00.0" ]; then
-                igpu="/dev/dri/$(basename "$dev")"
-                elif [ "$pci_id" = "0000:03:00.0" ]; then
-                dgpu="/dev/dri/$(basename "$dev")"
-            fi
+        [ -e "$dev/device" ] || continue
+        dev_id=$(cat "$dev/device/device" 2>/dev/null)
+        if [ "$dev_id" = "0x1681" ]; then
+            igpu="/dev/dri/$(basename "$dev")"
+        elif [ "$dev_id" = "0x7480" ]; then
+            dgpu="/dev/dri/$(basename "$dev")"
         fi
     done
-    echo "${igpu}:${dgpu}"
+
+    if [ -n "$igpu" ] && [ -n "$dgpu" ]; then
+        echo "${igpu}:${dgpu}"
+    elif [ -n "$igpu" ]; then
+        echo "$igpu"
+    else
+        echo "$dgpu"
+    fi
 )
 
 # Cursor
